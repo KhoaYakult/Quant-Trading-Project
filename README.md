@@ -55,3 +55,62 @@ Hệ thống được xây dựng theo quy trình 5 bước nối tiếp nhau:
 - **Phân tích:** Pandas, NumPy, Matplotlib
 - **Framework Backtest:** Backtrader
 - **Machine Learning:** Scikit-learn, Statsmodels
+- 
+
+# Quantitative Trading Research Project
+
+## Overview
+This project simulates the end-to-end workflow of a Quantitative Researcher. The goal is to build a comprehensive system ranging from raw data processing, strategy analysis, and event-driven backtesting to the application of Statistical methods and Machine Learning on the Vietnam Stock Market (Ticker: FPT).
+
+## The Pipeline
+The system follows a sequential 5-step pipeline:
+
+**1. Data Engineering (ETL) -> 2. Analysis -> 3. Backtesting -> 4. Statistics -> 5. Machine Learning**
+
+### Detailed Breakdown:
+
+### Phase 1: Data Engineering (ETL)
+*Goal: Convert fragmented data into a structured database.*
+- **Input:** Raw CSV files containing historical stock prices (OHLCV).
+- **Process:** Data cleaning, datetime formatting, and error handling.
+- **Output:** A structured SQLite database (`quant_trading.db`) allowing for efficient SQL queries instead of manual CSV parsing.
+
+### Phase 2: Market Analysis & Signal Generation
+*Goal: Identify trading ideas.*
+- Utilized Pandas for feature engineering.
+- **Strategy:** Moving Average Crossover (SMA).
+    - Buy Signal: SMA 20 crosses above SMA 50 (Golden Cross).
+    - Sell Signal: SMA 20 crosses below SMA 50 (Death Cross).
+- Result: Visualized potential entry and exit points on the FPT price chart.
+
+### Phase 3: Event-Driven Backtesting
+*Goal: Answer the question "Is this strategy profitable in reality?".*
+- Migrated logic to the **Backtrader** framework for professional simulation.
+- Real-world constraints simulated:
+    - Bar-by-bar execution.
+    - Transaction costs (Commission) and Slippage.
+    - Money Management: Kelly-inspired sizing (95% equity) with Compounding.
+- **Results (FPT Stock):**
+    - Total Return: ~80% (2023-2024).
+    - Sharpe Ratio: > 3.0 (Excellent risk-adjusted return).
+    - Max Drawdown: ~16% (Acceptable risk level).
+
+### Phase 4: Statistical Analysis
+*Goal: Validate data assumptions for modeling.*
+- Transformed prices into Log Returns.
+- **ADF Test:** Confirmed that Log Returns are stationary (p-value < 0.05), making them suitable for statistical modeling.
+- **Distribution Analysis:** Identified "Fat Tail" risks (Kurtosis > 0), indicating higher probability of extreme events compared to a Normal Distribution.
+
+### Phase 5: Machine Learning Application
+*Goal: Predict price direction (Up/Down) using AI.*
+- **Model:** Random Forest Classifier.
+- **Features:** SMA Ratio, Volatility, Momentum.
+- **Result:** Achieved ~50% Accuracy on the test set.
+- **Conclusion:** The market exhibits significant short-term randomness (Random Walk). Simple technical indicators are insufficient for high-accuracy prediction, reinforcing the importance of Risk Management over pure Prediction.
+
+## Tech Stack
+- **Language:** Python
+- **Database:** SQLite
+- **Analysis:** Pandas, NumPy, Matplotlib
+- **Backtesting Framework:** Backtrader
+- **Machine Learning:** Scikit-learn, Statsmodels
